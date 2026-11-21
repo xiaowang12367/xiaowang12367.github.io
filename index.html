@@ -127,35 +127,10 @@ SOFTWARE.
     .site-rail-links a[aria-current="location"] { box-shadow: inset 0 -2px var(--accent); }
 
     .home-screen {
-      position: relative;
-      isolation: isolate;
       display: grid;
       grid-template-rows: 1fr auto;
       min-height: calc(100vh - var(--page-offset, var(--rail-height)));
       min-height: calc(100svh - var(--page-offset, var(--rail-height)));
-      background-color: #111a26;
-    }
-
-    .hero-photo {
-      --photo-height: min(70%, 1151px);
-      --photo-position: center 57%;
-      position: absolute;
-      z-index: -1;
-      inset: 0;
-      max-width: 1439px;
-      margin-inline: auto;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .hero-photo::before {
-      position: absolute;
-      inset-block-start: 0;
-      inset-inline: 0;
-      height: var(--photo-height);
-      background: url("site-assets/home-cover.jpg") var(--photo-position) / cover no-repeat;
-      mask-image: linear-gradient(to bottom, #000 85%, transparent);
-      content: "";
     }
 
     .dashboard {
@@ -534,10 +509,6 @@ SOFTWARE.
       gap: 0.5rem 1.5rem;
     }
 
-    @media (min-width: 90rem) {
-      .hero-photo { mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
-    }
-
     @media (max-width: 48rem) {
       :root { --rail-height: 5.1rem; }
 
@@ -554,10 +525,6 @@ SOFTWARE.
       .site-rail-links a { padding-inline: 0; font-size: 0.875rem; }
 
       body::before { background-position: center, center, 39% center; }
-      .hero-photo {
-        --photo-height: min(70%, calc((100svh - var(--page-offset, var(--rail-height))) * 0.7), 1151px);
-        --photo-position: 42% 60%;
-      }
       .dashboard {
         grid-template-columns: 1fr;
         align-content: center;
@@ -613,7 +580,6 @@ SOFTWARE.
 
   <main>
     <div class="home-screen" id="home" tabindex="-1">
-      <div class="hero-photo" aria-hidden="true"></div>
       <div class="dashboard container">
         <section class="identity" aria-labelledby="name">
           <div class="logo">
