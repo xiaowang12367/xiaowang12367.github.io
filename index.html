@@ -1,0 +1,1153 @@
+<!doctype html>
+<!--
+  Adapted from imsyy/home: https://github.com/imsyy/home
+
+MIT License
+
+Copyright (c) 2022 imsyy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="饭桶小王的个人主页，包括学术与科研进展、个人工作与体育获奖、小红书更新和日常动态。">
+  <meta name="theme-color" content="#111a26">
+  <link rel="canonical" href="https://xiaowang12367.github.io/">
+  <title>饭桶小王的个人简介网页（持续更新版）</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #fffaf7;
+      --soft: #eee3db;
+      --line: rgba(255, 248, 240, 0.22);
+      --glass: rgba(15, 19, 31, 0.55);
+      --accent: #a9cddd;
+      --rail-height: 4rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-padding-top: var(--page-offset, var(--rail-height)); }
+    html.smooth-navigation { scroll-behavior: smooth; }
+    body {
+      isolation: isolate;
+      min-width: 0;
+      margin: 0;
+      background: #111a26;
+      color: var(--ink);
+      font: 1rem/1.65 "Microsoft YaHei", "微软雅黑", system-ui, sans-serif;
+    }
+
+    body::before {
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(7, 12, 19, 0.51), rgba(7, 12, 19, 0.61) 54%, rgba(7, 12, 19, 0.7)),
+        radial-gradient(ellipse at center, transparent 28%, rgba(9, 14, 25, 0.21) 100%),
+        url("site-assets/home-cover.jpg") center 56% / cover no-repeat;
+      content: "";
+      pointer-events: none;
+    }
+
+    a { color: inherit; text-underline-offset: 0.26em; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    h1, h2, p { margin: 0; }
+
+    .container {
+      width: min(calc(100% - 2 * clamp(1.25rem, 6.2vw, 5.5rem)), 72rem);
+      margin-inline: auto;
+    }
+
+    .site-rail {
+      position: sticky;
+      z-index: 2;
+      top: 0;
+      background: rgba(10, 16, 26, 0.9);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--line);
+    }
+
+    .site-rail-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem 1.3rem;
+      max-width: 96rem;
+      min-height: var(--rail-height);
+      margin-inline: auto;
+      padding-inline: clamp(1.25rem, 3.5vw, 3.25rem);
+    }
+
+    .site-heading {
+      color: var(--soft);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .site-rail-links {
+      display: flex;
+      gap: clamp(0.4rem, 1.4vw, 1.35rem);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .site-rail-links a {
+      display: grid;
+      place-items: center;
+      min-height: 2.75rem;
+      padding-inline: 0.25rem;
+      font-size: 0.9375rem;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .site-rail a:hover,
+    .site-rail a[aria-current="location"] { color: var(--accent); }
+    .site-rail-links a[aria-current="location"] { box-shadow: inset 0 -2px var(--accent); }
+
+    .home-screen {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      min-height: calc(100vh - var(--page-offset, var(--rail-height)));
+      min-height: calc(100svh - var(--page-offset, var(--rail-height)));
+      background-color: #111a26;
+    }
+
+    .hero-photo {
+      --photo-height: min(70%, 1151px);
+      --photo-position: center 57%;
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      max-width: 1439px;
+      margin-inline: auto;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-photo::before {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline: 0;
+      height: var(--photo-height);
+      background: url("site-assets/home-cover.jpg") var(--photo-position) / cover no-repeat;
+      mask-image: linear-gradient(to bottom, #000 85%, transparent);
+      content: "";
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      align-items: start;
+      align-content: end;
+      gap: clamp(2rem, 7.2vw, 7.25rem);
+      padding-block: clamp(6.75rem, 17vh, 11.5rem) clamp(1.25rem, 4.6vh, 3rem);
+    }
+
+    .identity { min-width: 0; }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: clamp(1rem, 2.1vw, 1.75rem);
+    }
+
+    .logo-img {
+      display: block;
+      flex: none;
+      width: clamp(5rem, 8vw, 7.25rem);
+      height: auto;
+      border: 3px solid rgba(255, 250, 245, 0.92);
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0.6rem 1.8rem rgba(4, 8, 18, 0.35);
+    }
+
+    .logo h1 {
+      font-size: clamp(2.75rem, 5.8vw, 5.25rem);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      text-shadow: 0 2px 8px rgba(5, 8, 14, 0.82), 0 8px 32px rgba(5, 8, 14, 0.5);
+    }
+
+    /* Adapted from the original template's frosted cards. */
+    .cards {
+      border: 1px solid var(--line);
+      border-radius: 0.625rem;
+      background-color: var(--glass);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0.9rem 2.7rem rgba(0, 0, 0, 0.14);
+    }
+
+    .description {
+      margin-top: clamp(1.5rem, 3.4vw, 2.875rem);
+      padding: 1.25rem 1.5rem 1.25rem 1.65rem;
+      border-inline-start: 2px solid var(--accent);
+    }
+
+    .description p { color: var(--soft); }
+    .description p + p { margin-top: 0.35rem; }
+
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 0.85rem;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding-inline: 0.3rem;
+      color: var(--ink);
+      font-size: 0.9375rem;
+      text-decoration-color: rgba(255, 240, 224, 0.52);
+    }
+
+    .social-link:hover { text-decoration-color: currentColor; }
+
+    .clock-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem 1.25rem;
+      padding: 1rem clamp(1rem, 2.4vw, 1.55rem);
+    }
+
+    .clock-card[hidden] { display: none; }
+
+    .clock-card p {
+      margin-top: 0.2rem;
+      color: var(--soft);
+      font-size: 0.875rem;
+    }
+
+    .clock-time {
+      color: var(--ink);
+      font-size: clamp(1.6rem, 3.1vw, 2.75rem);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+      white-space: nowrap;
+    }
+
+    .links-title {
+      margin: 1.45rem 0 0.75rem;
+      padding-inline: 0.1rem;
+      font-size: 1.0625rem;
+      font-weight: 600;
+      text-shadow: 0 1px 8px rgba(7, 8, 14, 0.74);
+    }
+
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.875rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .link-grid li { display: grid; min-width: 0; }
+
+    .link-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.7rem;
+      min-height: clamp(5.4rem, 8vw, 7.1rem);
+      padding: 0.95rem clamp(0.85rem, 1.85vw, 1.45rem);
+      font-size: clamp(0.875rem, 1.45vw, 1.0625rem);
+      font-weight: 600;
+      line-height: 1.43;
+      text-decoration: none;
+      transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .link-card::before {
+      width: 1.45rem;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .link-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(169, 205, 221, 0.68);
+      background-color: rgba(21, 23, 36, 0.7);
+    }
+
+    .page-next,
+    .page-previous,
+    .page-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-height: 2.75rem;
+      color: var(--accent);
+      font-size: 0.9375rem;
+      text-decoration: none;
+    }
+
+    .page-next:hover,
+    .page-previous:hover,
+    .page-home:hover { text-decoration: underline; }
+    .home-next { justify-self: center; margin-block-end: clamp(0.75rem, 2.2vh, 1.5rem); }
+
+    .section-page {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      min-height: calc(100vh - var(--page-offset, var(--rail-height)));
+      min-height: calc(100svh - var(--page-offset, var(--rail-height)));
+      padding-block: clamp(1.75rem, 5vh, 4rem);
+      border-block-start: 1px solid var(--line);
+      background-color: rgba(8, 15, 24, 0.5);
+    }
+
+    .section-page:nth-child(odd) { background-color: rgba(10, 19, 31, 0.66); }
+    .page-navigation {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.25rem 0.75rem;
+      margin-block-start: auto;
+    }
+
+    .page-neighbors {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      margin-inline-start: auto;
+    }
+
+    .updates {
+      --record-date-width: 9rem;
+      padding: clamp(1.15rem, 3vw, 1.75rem);
+      background-color: rgba(11, 17, 29, 0.72);
+    }
+
+    .updates h2 { font-size: clamp(1.4rem, 3vw, 2.15rem); line-height: 1.3; }
+    .updates p { margin-top: 0.55rem; color: var(--soft); }
+
+    .updates h3 {
+      margin: 0;
+      font-size: 1.0625rem;
+    }
+
+    .experience h3 { margin-top: 1.2rem; }
+
+    .research-list {
+      margin: 0.6rem 0 0;
+      padding-inline-start: 1.2em;
+      overflow-wrap: anywhere;
+    }
+
+    .research-list li + li { margin-top: 0.85rem; }
+    .research-list p { margin-top: 0.25rem; }
+    .record-caption { color: var(--soft); font-size: 0.875rem; }
+    .record-number { white-space: nowrap; }
+
+    .paper-list { padding-inline-start: 2.5rem; }
+    .paper-list > li::marker { content: "[" counter(list-item) "] "; }
+    .paper-doi { color: var(--soft); font-size: 0.875rem; }
+    .research a:hover { color: var(--accent); }
+    .research .research-meta { margin-top: 0.2rem; font-size: 0.875rem; }
+
+    .record-details {
+      margin-top: 0.9rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .record-details summary {
+      width: fit-content;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .record-groups h3 { margin-top: 1rem; }
+
+    .record-details summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .research .record-details summary,
+    .awards .award-category summary {
+      width: 100%;
+      padding-block: 0.35rem;
+    }
+
+    .aligned-records {
+      margin: 0.6rem 0 0;
+      padding: 0;
+      list-style: none;
+      overflow-wrap: anywhere;
+    }
+
+    .aligned-records > li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 26%) var(--record-date-width);
+      align-items: baseline;
+      gap: 0.25rem 1rem;
+      padding-block: 0.55rem;
+    }
+
+    .aligned-records > li + li { border-top: 1px solid var(--line); }
+    .aligned-records > li > strong { grid-column: 1; }
+    .record-result { grid-column: 2; text-align: center; }
+    .record-date {
+      grid-column: 3;
+      color: var(--soft);
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .experience .aligned-records > li,
+    .dated-record {
+      grid-template-columns: minmax(0, 1fr) var(--record-date-width);
+    }
+
+    .dated-record {
+      display: grid;
+      align-items: baseline;
+      column-gap: 1rem;
+    }
+
+    .experience .record-date,
+    .dated-record .record-date { grid-column: 2; }
+
+    .experience .education-records > li {
+      grid-template: "school college degree period" / minmax(0, 0.9fr) minmax(0, 1.5fr) minmax(0, 0.85fr) var(--record-date-width);
+    }
+
+    .education-records > li > strong { grid-area: school; }
+    .education-college { grid-area: college; }
+    .education-degree { grid-area: degree; }
+    .experience .education-records .record-date { grid-area: period; }
+
+    .aligned-records > li > p {
+      grid-column: 1 / -1;
+      margin: 0;
+      font-size: 0.875rem;
+    }
+
+    .daily-photo, .xhs-profile-photo {
+      display: block;
+      height: auto;
+      margin-top: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 0.375rem;
+    }
+
+    .daily-photo { width: min(100%, 18rem); }
+    .xhs-profile-photo { width: min(78%, 24rem); }
+
+    .daily-timeline {
+      margin-block-start: 1rem;
+      margin-inline-start: 0.25rem;
+      padding-inline-start: 1rem;
+      border-inline-start: 1px solid var(--line);
+    }
+
+    .timeline-entries {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .timeline-entries:empty,
+    .daily-timeline:has(.timeline-entries > li) .timeline-empty { display: none; }
+
+    .daily-timeline .timeline-empty,
+    .timeline-entries > li {
+      position: relative;
+      margin: 0;
+    }
+
+    .timeline-empty::before,
+    .timeline-entries > li::before {
+      position: absolute;
+      inset-block-start: 0.5em;
+      inset-inline-start: calc(-1rem - 4px);
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      content: "";
+    }
+
+    .timeline-entries > li + li { margin-block-start: 1.15rem; }
+
+    .timeline-entries time {
+      display: block;
+      width: min(var(--record-date-width), 100%);
+      margin-inline-start: auto;
+      color: var(--soft);
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .footer {
+      padding-block: 1.15rem 1.35rem;
+      background-color: rgba(11, 16, 25, 0.78);
+      color: var(--soft);
+      font-size: 0.875rem;
+    }
+
+    .footer .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+    }
+
+    @media (min-width: 90rem) {
+      .hero-photo { mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+    }
+
+    @media (max-width: 48rem) {
+      :root { --rail-height: 5.1rem; }
+
+      .site-rail-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-content: center;
+        gap: 0.2rem;
+        padding: 0.45rem 0.75rem;
+      }
+
+      .site-heading { width: fit-content; margin-inline-start: 0.25rem; }
+      .site-rail-links { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; }
+      .site-rail-links a { padding-inline: 0; font-size: 0.875rem; }
+
+      body::before { background-position: center, center, 39% center; }
+      .hero-photo {
+        --photo-height: min(70%, calc((100svh - var(--page-offset, var(--rail-height))) * 0.7), 1151px);
+        --photo-position: 42% 60%;
+      }
+      .dashboard {
+        grid-template-columns: 1fr;
+        align-content: center;
+        gap: 2.15rem;
+        padding-block: clamp(3rem, 8vh, 4.5rem) 2rem;
+      }
+      .logo h1 { font-size: clamp(2.6rem, 9.8vw, 4.25rem); }
+
+      .experience .education-records > li {
+        grid-template: "school period" "college degree" / minmax(0, 1fr) var(--record-date-width);
+      }
+    }
+
+    @media (max-width: 36rem) {
+      .updates { --record-date-width: 8.25rem; }
+
+      .awards .aligned-records > li {
+        grid-template-columns: minmax(0, 1fr) var(--record-date-width);
+      }
+
+      .awards .aligned-records > li:has(.record-result) > strong { grid-column: 1 / -1; }
+      .record-result { grid-column: 1; }
+      .awards .record-date { grid-column: 2; }
+      .aligned-records > li, .dated-record { column-gap: 0.5rem; }
+    }
+
+    @media (max-width: 23rem) {
+      .clock-card { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html.smooth-navigation { scroll-behavior: auto; }
+      .link-card { transition: none; }
+      .link-card:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-rail">
+    <div class="site-rail-inner">
+      <a class="site-heading" href="#home">个人简介网页（持续更新版）</a>
+      <nav aria-label="顶部导航">
+        <ul class="site-rail-links">
+          <li><a href="#research">学术科研</a></li>
+          <li><a href="#experience">个人经历</a></li>
+          <li><a href="#work-sports">获奖情况</a></li>
+          <li><a href="#xiaohongshu">小红书</a></li>
+          <li><a href="#daily">日常动态</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="home-screen" id="home" tabindex="-1">
+      <div class="hero-photo" aria-hidden="true"></div>
+      <div class="dashboard container">
+        <section class="identity" aria-labelledby="name">
+          <div class="logo">
+            <img class="logo-img" src="site-assets/pigeon-avatar.jpg" alt="鸽子表情包，配字「我一定来」" width="760" height="760">
+            <h1 id="name">饭桶小王</h1>
+          </div>
+
+          <div class="description cards">
+            <p>✨四非→985｜超绝饭桶一位｜有点点 i 的ENFJ</p>
+            <p>⭐️一个喜欢随机分享自己胡思乱想的碎碎念博主</p>
+            <p>✨“热情的不止是我 还有整个世界”</p>
+            <p>🐦不定期分享活蹦乱跳的生活 &amp; 经验</p>
+            <p>欢迎你发现了我的个人主页鸭~</p>
+            <p>我的邮箱：<a href="mailto:1459377944@qq.com">1459377944@qq.com</a></p>
+          </div>
+
+          <div class="social-links">
+            <a class="social-link" href="https://github.com/xiaowang12367">GitHub 个人资料</a>
+            <a class="social-link" href="https://xhslink.cn/o/9yq7WqUdYlD">小红书个人账号（饭桶小王）</a>
+          </div>
+        </section>
+
+        <div>
+          <div class="clock-card cards" id="clock-card" hidden>
+            <div>
+              <time id="clock-date"></time>
+              <p>北京时间</p>
+            </div>
+            <time class="clock-time" id="clock-time"></time>
+          </div>
+
+          <nav aria-labelledby="links-heading">
+            <h2 class="links-title" id="links-heading">主页栏目</h2>
+            <ul class="link-grid">
+              <li><a class="link-card cards" href="#research">学术 &amp; 科研进展</a></li>
+              <li><a class="link-card cards" href="#work-sports">获奖情况</a></li>
+              <li><a class="link-card cards" href="#xiaohongshu">小红书（饭桶小王）</a></li>
+              <li><a class="link-card cards" href="#daily">日常动态 &amp; 碎碎念</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <a class="page-next home-next" href="#research">向下浏览 <span aria-hidden="true">↓</span></a>
+    </div>
+    <section class="section-page" id="research" tabindex="-1" aria-labelledby="research-heading">
+      <div class="updates cards research container">
+        <h2 id="research-heading">学术 &amp; 科研进展</h2>
+
+        <details class="record-details record-groups">
+          <summary>论文情况（10 篇）</summary>
+          <h3>一作论文（2 篇）</h3>
+          <ol class="research-list paper-list">
+            <li lang="en">
+              Wang Zian, Gu Yixiang, Liu Jiarui, Zhang Yue, Feng Kai, Dai Jietao, Zheng Guoxiong. <a href="https://doi.org/10.3390/act14090414" lang="en">Event-Triggered Fixed-Time Consensus Tracking Control for Uncertain Nonlinear Multi-Agent Systems with Dead-Zone Input</a>[J]. Actuators, <time datetime="2025">2025</time>, 14(9): 414.
+              <span class="paper-doi">DOI: 10.3390/act14090414.</span>
+            </li>
+            <li>
+              王梓安, 冯凯, 刘嘉睿, 胡翰泓, 唐睿智, 王建晖. <a href="https://link.cnki.net/urlid/41.1227.TN.20250115.1542.002">多无人机分布式编队避撞控制方法研究</a>[J]. 电光与控制, <time datetime="2025">2025</time>, 32(5): 27-34.
+              <span class="paper-doi">DOI: 10.3969/j.issn.1671-637X.2025.05.005.</span>
+            </li>
+          </ol>
+
+          <h3>核心论文（8 篇）</h3>
+          <ol class="research-list paper-list" start="3">
+            <li lang="en">
+              Liu Jinbo, Yang Jintang, Wang Zian, Chen Kairui. <a href="https://doi.org/10.3390/machines14080869" lang="en">Ring-Coupled Nonlinear Adaptive PI Coordinated Control Strategy for Multi-PMSMs with Event-Triggered Mechanism</a>[J]. Machines, <time datetime="2026">2026</time>, 14(8): 869.
+              <span class="paper-doi">DOI: 10.3390/machines14080869.</span>
+            </li>
+            <li lang="en">
+              Chen Yiting, Wu Yushen, Chen Kairui, Wang Jianhui, Wang Zian. <a href="https://doi.org/10.1016/j.isatra.2025.05.047" lang="en">Adaptive PI nonlinear cooperative control for motor cluster</a>[J]. ISA Transactions, <time datetime="2025">2025</time>, 165: 191-208.
+              <span class="paper-doi">DOI: 10.1016/j.isatra.2025.05.047.</span>
+            </li>
+            <li lang="en">
+              Tang Ruizhi, Hu Hanhong, Lin Hai, Li Jiahao, Wang Zian, Zhu Guanquan, Mei Ziyou, Dai Jietao. <a href="https://doi.org/10.3390/act14090413" lang="en">Design and Implementation of an Autonomous Intelligent Fertigation System for Cross-Regional Applications</a>[J]. Actuators, <time datetime="2025">2025</time>, 14(9): 413.
+              <span class="paper-doi">DOI: 10.3390/act14090413.</span>
+            </li>
+            <li>
+              古宜翔, 王梓安, 李嘉豪, 唐睿智, 张春良. <a href="https://doi.org/10.3969/j.issn.1001-3881.2025.08.004">带不对称约束的轮式机器人固定时间控制</a>[J]. 机床与液压, <time datetime="2025">2025</time>, 53(8): 28-38.
+              <span class="paper-doi">DOI: 10.3969/j.issn.1001-3881.2025.08.004.</span>
+            </li>
+            <li lang="en">
+              Zhang Hongkang, Hu Zikai, Wang Jianhui, Wang Zian. <a href="https://doi.org/10.1002/rnc.7761" lang="en">Fixed-Time Consensus Control With Event-Triggered Mechanism for Multi-Agent Systems Suffered Time-Varying State Constraints</a>[J]. International Journal of Robust and Nonlinear Control, <time datetime="2025">2025</time>, 35(5): 1856-1869.
+              <span class="paper-doi">DOI: 10.1002/rnc.7761.</span>
+            </li>
+            <li lang="en">
+              Long Shangbin, Huang Weicong, Wang Jianhui, Liu Jiarui, Gu Yixiang, Wang Zian. <a href="https://doi.org/10.1109/TASE.2024.3445135" lang="en">A Fixed-Time Consensus Control With Prescribed Performance for Multi-Agent Systems Under Full-State Constraints</a>[J]. IEEE Transactions on Automation Science and Engineering, <time datetime="2025">2025</time>, 22: 6398-6407.
+              <span class="paper-doi">DOI: 10.1109/TASE.2024.3445135.</span>
+            </li>
+            <li lang="en">
+              Wang Jianhui, Huang Wenqi, Wang Zian, Wang Junwei, Chen Kairui. <a href="https://doi.org/10.1088/1402-4896/ad6bce" lang="en">DNA dynamic coding image encryption algorithm with a meminductor chaotic system</a>[J]. Physica Scripta, <time datetime="2024">2024</time>, 99(9): 095231.
+              <span class="paper-doi">DOI: 10.1088/1402-4896/ad6bce.</span>
+            </li>
+            <li lang="en">
+              Chen Kairui, Gu Yixiang, Huang Weicong, Zhang Zhonglin, Wang Zian, Wang Xiaofeng. <a href="https://doi.org/10.3390/math12101471" lang="en">Fixed-Time Adaptive Event-Triggered Guaranteed Performance Tracking Control of Nonholonomic Mobile Robots under Asymmetric State Constraints</a>[J]. Mathematics, <time datetime="2024">2024</time>, 12(10): 1471.
+              <span class="paper-doi">DOI: 10.3390/math12101471.</span>
+            </li>
+          </ol>
+        </details>
+
+        <details class="record-details">
+          <summary>参与项目（2 项）</summary>
+          <ul class="research-list">
+            <li>
+              <div class="dated-record">
+                <strong>基于深度学习的自故障检测植灌机器人（负责人）</strong>
+                <span class="record-date"><time datetime="2023-09">2023.09</time>-<time datetime="2025-06">2025.06</time></span>
+              </div>
+            </li>
+            <li>
+              <div class="dated-record">
+                <strong>多场景应用下的机器人智能柔顺打磨控制方法研究（团队成员）</strong>
+                <span class="record-date"><time datetime="2024-09">2024.09</time>-<time datetime="2025-05">2025.05</time></span>
+              </div>
+            </li>
+          </ul>
+        </details>
+
+        <details class="record-details record-groups">
+          <summary>专利情况（13 项）</summary>
+          <h3>授权专利（7 项）</h3>
+          <ul class="research-list">
+            <li><strong>一种用于扦插作物的苗木传输装置</strong> <span class="record-caption">（发明专利，<span class="record-number">CN 117246726 B</span>，授权）</span></li>
+            <li><strong>一种可自动检测与更换砂轮的钢轨焊缝打磨设备</strong> <span class="record-caption">（实用新型专利，<span class="record-number">CN 224027177 U</span>，授权）</span></li>
+            <li><strong>一种全自动幼苗栽植设备</strong> <span class="record-caption">（实用新型专利，<span class="record-number">CN 223207521 U</span>，授权）</span></li>
+            <li><strong>一种新型圆锥滚子轴承内圈表面强化设备</strong> <span class="record-caption">（发明专利，<span class="record-number">CN 119388336 B</span>，授权）</span></li>
+            <li><strong>一种可多复杂工况运行的钢轨探伤小车</strong> <span class="record-caption">（实用新型专利，<span class="record-number">CN 221914288 U</span>，授权）</span></li>
+            <li><strong>幼苗移栽精准施灌智能装备</strong> <span class="record-caption">（发明专利，<span class="record-number">CN 117837351 B</span>，授权）</span></li>
+            <li><strong>种植灌溉一体机的培土机构及算法识别</strong> <span class="record-caption">（发明专利，<span class="record-number">CN 117084034 B</span>，授权）</span></li>
+          </ul>
+
+          <h3>实质审查（4 项）</h3>
+          <ul class="research-list">
+            <li><strong>多无人机协同编队控制方法、设备及介质</strong> <span class="record-caption">（发明专利，<span class="record-number">CN 117250984 A</span>，实审）</span></li>
+            <li><strong>一种具有时变约束的机械臂控制方法、装置及介质</strong> <span class="record-caption">（发明专利，<span class="record-number">CN 118254171 A</span>，实审）</span></li>
+            <li><strong>无人机的协同编队方法、系统、设备及存储介质</strong> <span class="record-caption">（发明专利，<span class="record-number">CN 117806367 A</span>，实审）</span></li>
+            <li><strong>一种干垃圾破袋回收装置及控制方法</strong> <span class="record-caption">（发明专利，<span class="record-number">CN 119305891 A</span>，实审）</span></li>
+          </ul>
+
+          <h3>已受理专利申请（2 项）</h3>
+          <ul class="research-list">
+            <li><strong>一种柔性钢轨焊缝打磨装置</strong> <span class="record-caption">（实用新型专利，<span class="record-number">申请号 202423170506.5</span>，受理）</span></li>
+            <li><strong>一种应用于钎焊金刚石砂轮的三自由度径向柔性打磨装置</strong> <span class="record-caption">（实用新型专利，<span class="record-number">申请号 202323437394.0</span>，受理）</span></li>
+          </ul>
+        </details>
+
+        <details class="record-details">
+          <summary>软件著作权（8 项）</summary>
+          <ul class="research-list">
+            <li>
+              <div class="dated-record">
+                <span><strong>高铁轨道打磨作业平台 V1.0</strong> <span class="record-caption">（登记号 2025SR0922266）</span></span>
+                <time class="record-date" datetime="2025-06-04">2025 年 6 月 4 日</time>
+              </div>
+            </li>
+            <li>
+              <div class="dated-record">
+                <span><strong>高铁轨道打磨效果分析系统 V1.0</strong> <span class="record-caption">（登记号 2025SR0922320）</span></span>
+                <time class="record-date" datetime="2025-06-04">2025 年 6 月 4 日</time>
+              </div>
+            </li>
+            <li>
+              <div class="dated-record">
+                <span><strong>高铁轨道打磨质量监测系统 V1.0</strong> <span class="record-caption">（登记号 2025SR0922277）</span></span>
+                <time class="record-date" datetime="2025-06-04">2025 年 6 月 4 日</time>
+              </div>
+            </li>
+            <li>
+              <div class="dated-record">
+                <span><strong>高铁铁轨打磨机器臂控制系统 V1.0</strong> <span class="record-caption">（登记号 2025SR0922402）</span></span>
+                <time class="record-date" datetime="2025-06-04">2025 年 6 月 4 日</time>
+              </div>
+            </li>
+            <li>
+              <div class="dated-record">
+                <span><strong>灯笼辣椒健康状态监测系统 V1.0</strong> <span class="record-caption">（登记号 2024SR2209490）</span></span>
+                <time class="record-date" datetime="2024-12-26">2024 年 12 月 26 日</time>
+              </div>
+            </li>
+            <li>
+              <div class="dated-record">
+                <span><strong>基于QT的灯笼辣椒种植操作系统 V1.0</strong> <span class="record-caption">（登记号 2024SR1980632）</span></span>
+                <time class="record-date" datetime="2024-12-04">2024 年 12 月 4 日</time>
+              </div>
+            </li>
+            <li>
+              <div class="dated-record">
+                <span><strong>灯笼辣椒采摘农机操作系统 V1.0</strong> <span class="record-caption">（登记号 2024SR1968455）</span></span>
+                <time class="record-date" datetime="2024-12-03">2024 年 12 月 3 日</time>
+              </div>
+            </li>
+            <li>
+              <div class="dated-record">
+                <span><strong>基于Qt的中国象棋游戏软件 V1.0</strong> <span class="record-caption">（登记号 2024SR0348058）</span></span>
+                <time class="record-date" datetime="2024-03-04">2024 年 3 月 4 日</time>
+              </div>
+            </li>
+          </ul>
+        </details>
+      </div>
+      <div class="page-navigation container">
+        <a class="page-home" href="#home">返回首页 <span aria-hidden="true">↑</span></a>
+        <div class="page-neighbors">
+          <a class="page-previous" href="#home" aria-label="上一栏 · 首页"><span aria-hidden="true">↑</span> 上一栏</a>
+          <a class="page-next" href="#experience">下一栏 · 个人经历 <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-page" id="experience" tabindex="-1" aria-labelledby="experience-heading">
+      <div class="updates cards experience container">
+        <h2 id="experience-heading">个人经历</h2>
+
+        <h3>教育经历</h3>
+        <ul class="aligned-records education-records">
+          <li>
+            <strong>华南理工大学</strong>
+            <span class="education-college record-caption">电力学院</span>
+            <span class="education-degree record-caption">2026 级专业硕士在读</span>
+            <span class="record-date"><time datetime="2026-09">2026.09</time>-至今</span>
+          </li>
+          <li>
+            <strong>广州大学</strong>
+            <span class="education-college record-caption">机械与电气工程学院 · 电气工程及其自动化</span>
+            <span class="education-degree record-caption">工学学士</span>
+            <span class="record-date"><time datetime="2022-09">2022.09</time> – <time datetime="2026-06">2026.06</time></span>
+          </li>
+        </ul>
+
+        <h3>校园任职</h3>
+        <ul class="aligned-records">
+          <li>
+            <strong>华南理工大学电气专硕 2 班宣传委员</strong>
+            <span class="record-date"><time datetime="2026-09">2026.09</time> – 至今</span>
+          </li>
+          <li>
+            <strong>华南理工大学电力学院学生会体育部部员</strong>
+            <span class="record-date"><time datetime="2026-09">2026.09</time> – 至今</span>
+          </li>
+          <li>
+            <strong>广州大学机械与电气工程学院乒乓球院队队长</strong>
+            <span class="record-date"><time datetime="2024-09">2024.09</time> – <time datetime="2026-06">2026.06</time></span>
+            <p>连续两年担任院队队长，组织日常训练并带队参加校级比赛。任职期间，带队获校乒乓球锦标赛团体第四名，院队在广州大学乒乓球比赛中获体育道德风尚奖，个人获评优秀裁判。目前开球网积分为 1600+。</p>
+          </li>
+          <li>
+            <strong>广州大学学生乒乓球协会竞技部负责人</strong>
+            <span class="record-date"><time datetime="2023-06">2023.06</time> – <time datetime="2024-06">2024.06</time></span>
+            <p>组织 10 余次会员培训，为同学提供免费乒乓球指导。参与校级乒乓球比赛和教职工乒乓球比赛的赛程组织与现场协调，多次担任裁判，获评广州大学优秀裁判。</p>
+          </li>
+          <li>
+            <strong>广州大学电气 221 班班长</strong>
+            <span class="record-date"><time datetime="2022-09">2022.09</time> – <time datetime="2026-06">2026.06</time></span>
+            <p>负责师生沟通和班级事务，参与班级易班建设，组织同学参加院运会、开展班团会等活动共 20 余次。协助团支书开展党团建设，班级团支部获评广州大学 2024—2025 学年五四红旗团支部。任职期间连续四年获评广州大学优秀学生干部和优秀学生。2025—2026 学年，电气 221 班获评优良学风标兵班。</p>
+          </li>
+        </ul>
+
+        <h3>实习经历</h3>
+        <ul class="aligned-records">
+          <li>
+            <strong>中国长江三峡集团实践基地 · 调度实习</strong>
+            <span class="record-date"><time datetime="2025-04">2025.04</time> – <time datetime="2025-05">2025.05</time></span>
+            <p>在实践基地学习水电站运行流程和发电调度，了解调度安排与水轮发电机组运行的关系。</p>
+            <p>参与机组运行与水位监测相关实践，学习结合机组工况和水位变化观察电站运行情况。</p>
+          </li>
+        </ul>
+      </div>
+      <div class="page-navigation container">
+        <a class="page-home" href="#home">返回首页 <span aria-hidden="true">↑</span></a>
+        <div class="page-neighbors">
+          <a class="page-previous" href="#research" aria-label="上一栏 · 学术科研"><span aria-hidden="true">↑</span> 上一栏</a>
+          <a class="page-next" href="#work-sports">下一栏 · 获奖情况 <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-page" id="work-sports" tabindex="-1" aria-labelledby="awards-heading">
+      <div class="updates cards awards container">
+        <h2 id="awards-heading">获奖情况</h2>
+        <details class="record-details award-category">
+          <summary>奖学金（4 项）</summary>
+          <ul class="aligned-records">
+            <li>
+              <strong>广州大学 2025—2026 学年奖学金</strong>
+              <span class="record-result">一等奖</span>
+              <time class="record-date" datetime="2026-06">2026 年 6 月</time>
+            </li>
+            <li>
+              <strong>2024—2025 学年度本专科生国家奖学金</strong>
+              <span class="record-result">国家奖学金</span>
+              <time class="record-date" datetime="2025-12">2025 年 12 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2023—2024 学年奖学金</strong>
+              <span class="record-result">一等奖</span>
+              <time class="record-date" datetime="2024-12">2024 年 12 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2022—2023 学年奖学金</strong>
+              <span class="record-result">一等奖</span>
+              <time class="record-date" datetime="2023-11">2023 年 11 月</time>
+            </li>
+          </ul>
+        </details>
+
+        <details class="record-details award-category">
+          <summary>学术竞赛（18 项）</summary>
+          <ul class="aligned-records">
+            <li><strong>全国大学生“人工智能＋”创新创业大赛</strong> <span class="record-result">初赛一等奖</span> <time class="record-date" datetime="2025-10">2025 年 10 月</time></li>
+            <li><strong>中国国际大学生创新大赛（2025）广东省分赛</strong> <span class="record-result">高教产业赛道银奖</span> <time class="record-date" datetime="2025-08">2025 年 8 月</time></li>
+            <li><strong>中国国际大学生创新大赛（2025）广东省分赛</strong> <span class="record-result">高教主赛道银奖</span> <time class="record-date" datetime="2025-08">2025 年 8 月</time></li>
+            <li><strong>中国大学生机械工程创新创意大赛第六届“明石杯”微纳传感技术与智能应用赛</strong> <span class="record-result">初赛一等奖</span> <time class="record-date" datetime="2025-07">2025 年 7 月</time></li>
+            <li><strong>“天鹅杯”第十届国际大学生智能农业装备创新大赛</strong> <span class="record-result">优秀奖</span> <time class="record-date" datetime="2025-05">2025 年 5 月</time></li>
+            <li><strong>第十九届“挑战杯”大学生课外学术科技作品竞赛</strong> <span class="record-result">广州大学校赛一等奖</span> <time class="record-date" datetime="2025-03">2025 年 3 月</time></li>
+            <li><strong>全国大学生英语翻译大赛</strong> <span class="record-result">大学英语组国家级二等奖，个人奖</span> <time class="record-date" datetime="2024-12">2024 年 12 月</time></li>
+            <li><strong>2024 年广东省高等学校大学生工业设计大赛</strong> <span class="record-result">省级二等奖</span> <time class="record-date" datetime="2024-11">2024 年 11 月</time></li>
+            <li><strong>中国国际大学生创新大赛（2024）产业命题赛道</strong> <span class="record-result">国赛铜奖</span> <time class="record-date" datetime="2024-10">2024 年 10 月</time></li>
+            <li><strong>广东省大学生计算机设计大赛</strong> <span class="record-result">省级三等奖</span> <time class="record-date" datetime="2024-09">2024 年 9 月</time></li>
+            <li><strong>中国国际大学生创新大赛（2024）广东省分赛</strong> <span class="record-result">省赛银奖</span> <time class="record-date" datetime="2024-08">2024 年 8 月</time></li>
+            <li><strong>第十届全国大学生能源经济学术创意大赛</strong> <span class="record-result">广东—香港—澳门赛区三等奖</span> <time class="record-date" datetime="2024-05">2024 年 5 月</time></li>
+            <li><strong>第十七届 iCAN 大学生创新创业大赛</strong> <span class="record-result">全国总决赛三等奖</span> <time class="record-date" datetime="2023-12">2023 年 12 月</time></li>
+            <li><strong>第十届广东大学生节能减排工业设计大赛</strong> <span class="record-result">省级一等奖</span> <time class="record-date" datetime="2023-11">2023 年 11 月</time></li>
+            <li><strong>中国大学生工程实践与创新能力大赛</strong> <span class="record-result">省级三等奖</span> <time class="record-date" datetime="2023-11">2023 年 11 月</time></li>
+            <li><strong>第十六届全国大学生节能减排社会实践与科技竞赛</strong> <span class="record-result">全国三等奖</span> <time class="record-date" datetime="2023-08">2023 年 8 月</time></li>
+            <li><strong>第九届中国国际“互联网+”大学生创新创业大赛广州大学校赛</strong> <span class="record-result">高教主赛道铜奖</span> <time class="record-date" datetime="2023-06">2023 年 6 月</time></li>
+            <li><strong>广州大学第三届小工程训练赛</strong> <span class="record-result">校级三等奖</span> <time class="record-date" datetime="2023">2023 年</time></li>
+          </ul>
+        </details>
+
+        <details class="record-details award-category">
+          <summary>体育竞赛（15 项）</summary>
+          <ul class="aligned-records">
+            <li><strong>华南理工大学 2026 年“电研杯”研究生乒乓球团体赛</strong> <span class="record-result">团体亚军</span> <time class="record-date" datetime="2026-10">2026 年 10 月</time></li>
+            <li><strong>华南理工大学 2026 年“电研杯”研究生乒乓球团体赛</strong> <span class="record-result">明星选手</span> <time class="record-date" datetime="2026-10">2026 年 10 月</time></li>
+            <li><strong>2026 年广州大学乒乓球比赛</strong> <span class="record-result">甲组男子双打第 5 名</span> <time class="record-date" datetime="2026-04">2026 年 4 月</time></li>
+            <li><strong>2026 年广州大学乒乓球比赛</strong> <span class="record-result">甲组团体总分第 4 名</span> <time class="record-date" datetime="2026-04">2026 年 4 月</time></li>
+            <li><strong>广州大学机械与电气工程学院 2024—2025 年第一届班级乒乓球赛暨师生交流赛</strong> <span class="record-result">第 2 名</span> <time class="record-date" datetime="2025-04">2025 年 4 月</time></li>
+            <li><strong>广州大学机电学院乒乓球赛</strong> <span class="record-result">混双第 1 名</span> <time class="record-date" datetime="2024-04">2024 年 4 月</time></li>
+            <li><strong>广州大学机电学院乒乓球赛</strong> <span class="record-result">男双第 2 名</span> <time class="record-date" datetime="2024-04">2024 年 4 月</time></li>
+            <li><strong>广州大学机电学院班际羽毛球赛</strong> <span class="record-result">男双第 7 名</span> <time class="record-date" datetime="2023-12">2023 年 12 月</time></li>
+            <li><strong>广州大学第二届校园班际篮球约战赛</strong> <span class="record-result">班级组二等奖</span> <time class="record-date" datetime="2023-06">2023 年 6 月</time></li>
+            <li><strong>广州大学乒乓球新生杯</strong> <span class="record-result">男子单打第 8 名</span> <time class="record-date" datetime="2023-05">2023 年 5 月</time></li>
+            <li><strong>广州大学机电学院首届班际羽毛球赛</strong> <span class="record-result">混双第 5 名</span> <time class="record-date" datetime="2023-04">2023 年 4 月</time></li>
+            <li><strong>广州大学第十三届学生乒乓球比赛</strong> <span class="record-result">甲组男子双打第 5 名</span> <time class="record-date" datetime="2023-04">2023 年 4 月</time></li>
+            <li><strong>广州大学机电学院第一届班际乒乓球赛</strong> <span class="record-result">男双第 1 名</span> <time class="record-date" datetime="2023-03">2023 年 3 月</time></li>
+            <li><strong>广州大学机电学院第一届班际乒乓球赛</strong> <span class="record-result">男单第 2 名</span> <time class="record-date" datetime="2023-03">2023 年 3 月</time></li>
+            <li><strong>广州大学三院联合田径运动会</strong> <span class="record-result">男子引体向上第 5 名</span> <time class="record-date" datetime="2022-10">2022 年 10 月</time></li>
+          </ul>
+        </details>
+
+        <details class="record-details award-category">
+          <summary>学生荣誉（12 项）</summary>
+          <ul class="aligned-records">
+            <li>
+              <strong>广州大学 2025—2026 学年优秀学生</strong>
+              <time class="record-date" datetime="2026-06">2026 年 6 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2025—2026 学年优秀学生干部</strong>
+              <time class="record-date" datetime="2026-06">2026 年 6 月</time>
+            </li>
+            <li>
+              <strong>广州大学机械与电气工程学院 2024—2025 学年十佳学生</strong>
+              <time class="record-date" datetime="2025-05">2025 年 5 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2024—2025 年度优秀共青团员</strong>
+              <span class="record-result">正式表彰</span>
+            </li>
+            <li>
+              <strong>广州大学 2024—2025 学年优秀学生</strong>
+            </li>
+            <li>
+              <strong>广州大学 2024—2025 学年优秀学生干部</strong>
+            </li>
+            <li>
+              <strong>广州大学 2023—2024 学年优秀学生</strong>
+              <time class="record-date" datetime="2024-12">2024 年 12 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2023—2024 学年优秀学生干部</strong>
+              <time class="record-date" datetime="2024-12">2024 年 12 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2022—2023 学年优秀学生</strong>
+              <time class="record-date" datetime="2023-11">2023 年 11 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2022—2023 学年优秀学生干部</strong>
+              <time class="record-date" datetime="2023-11">2023 年 11 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2022—2023 学年“德才兼备 家国情怀”先进个人</strong>
+              <time class="record-date" datetime="2023-11">2023 年 11 月</time>
+            </li>
+            <li>
+              <strong>广州大学 2022—2023 学年劳动达人</strong>
+              <time class="record-date" datetime="2023-11">2023 年 11 月</time>
+            </li>
+          </ul>
+        </details>
+
+        <details class="record-details award-category">
+          <summary>其他荣誉（2 项）</summary>
+          <ul class="aligned-records">
+            <li>
+              <strong>2023 年广州大学优秀青年志愿者</strong>
+              <time class="record-date" datetime="2024-03">2024 年 3 月</time>
+            </li>
+            <li>
+              <strong>广州大学第二十一届教职工乒乓球混合团体比赛</strong>
+              <span class="record-result">优秀裁判</span>
+              <time class="record-date" datetime="2023-06">2023 年 6 月</time>
+            </li>
+          </ul>
+        </details>
+      </div>
+      <div class="page-navigation container">
+        <a class="page-home" href="#home">返回首页 <span aria-hidden="true">↑</span></a>
+        <div class="page-neighbors">
+          <a class="page-previous" href="#experience" aria-label="上一栏 · 个人经历"><span aria-hidden="true">↑</span> 上一栏</a>
+          <a class="page-next" href="#xiaohongshu">下一栏 · 小红书 <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-page" id="xiaohongshu" tabindex="-1" aria-labelledby="xiaohongshu-heading">
+      <div class="updates cards container">
+        <h2 id="xiaohongshu-heading">小红书（饭桶小王）</h2>
+        <p><strong>1,351</strong> 位粉丝 · <strong>1 万+</strong> 获赞与收藏</p>
+        <img class="xhs-profile-photo" src="site-assets/xhs-profile.png" alt="饭桶小王的小红书主页截图，小红书号 Small_wang123" width="702" height="528" loading="lazy">
+        <p><a href="https://xhslink.cn/o/9yq7WqUdYlD">打开小红书主页</a></p>
+      </div>
+      <div class="page-navigation container">
+        <a class="page-home" href="#home">返回首页 <span aria-hidden="true">↑</span></a>
+        <div class="page-neighbors">
+          <a class="page-previous" href="#work-sports" aria-label="上一栏 · 获奖情况"><span aria-hidden="true">↑</span> 上一栏</a>
+          <a class="page-next" href="#daily">下一栏 · 日常动态 <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-page" id="daily" tabindex="-1" aria-labelledby="daily-heading">
+      <div class="updates cards container">
+        <h2 id="daily-heading">日常动态 &amp; 碎碎念</h2>
+        <div class="daily-timeline">
+          <p class="timeline-empty">日常记录待更新。</p>
+          <ol class="timeline-entries" aria-label="日常动态时间轴">
+            <li>
+              <time datetime="2026-11-22T01:51+08:00">2026.11.22 01:51</time>
+              <p>其实创建这个个人主页纯粹是本人在codex额度没用完的前提下一时兴起，那就靠这个应该很少有人知道的个人主页更新我的超绝碎碎念吧，鉴于如今小红书的马甲已经被发现的一干二净，这里就当作是我的小小号拿来随便更新一些杂七杂八的吧！加油加油小王！</p>
+            </li>
+          </ol>
+        </div>
+        <img class="daily-photo" src="site-assets/home-cover.jpg" alt="一个人走在路面的彩色线上，两侧各有一只黑色长颈水鸟" width="1439" height="1151" loading="lazy">
+      </div>
+      <div class="page-navigation container">
+        <a class="page-home" href="#home">返回首页 <span aria-hidden="true">↑</span></a>
+        <div class="page-neighbors">
+          <a class="page-previous" href="#xiaohongshu" aria-label="上一栏 · 小红书"><span aria-hidden="true">↑</span> 上一栏</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <span>基于 <a href="https://github.com/imsyy/home">imsyy/home</a> 改编</span>
+      <a href="#home">返回首页</a>
+    </div>
+  </footer>
+
+  <script>
+    const pageRail = document.querySelector(".site-rail");
+    const pageLinks = pageRail.querySelectorAll("a[href^='#']");
+    const pageSections = document.querySelectorAll(".home-screen, .section-page");
+    let pageFrame = 0;
+
+    function updateCurrentPage() {
+      pageFrame = 0;
+      const readingLine = Math.ceil(pageRail.getBoundingClientRect().bottom) + 2;
+      let currentPage = pageSections[0];
+      for (const page of pageSections) {
+        if (page.getBoundingClientRect().top > readingLine) break;
+        currentPage = page;
+      }
+      for (const link of pageLinks) {
+        if (link.hash === "#" + currentPage.id) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      }
+    }
+
+    function schedulePageUpdate() {
+      if (!pageFrame) pageFrame = requestAnimationFrame(updateCurrentPage);
+    }
+
+    function updatePageOffset() {
+      const height = Math.ceil(pageRail.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--page-offset", height + "px");
+      schedulePageUpdate();
+    }
+
+    updatePageOffset();
+    new ResizeObserver(updatePageOffset).observe(pageRail);
+    addEventListener("scroll", schedulePageUpdate, { passive: true });
+    addEventListener("resize", schedulePageUpdate);
+    addEventListener("pageshow", schedulePageUpdate);
+    document.addEventListener("click", event => {
+      if (event.target.closest('a[href^="#"]')) {
+        document.documentElement.classList.add("smooth-navigation");
+      }
+    });
+    updateCurrentPage();
+
+    const timeZone = "Asia/Shanghai";
+    const dateFormat = new Intl.DateTimeFormat("zh-CN", {
+      timeZone, year: "numeric", month: "long", day: "numeric", weekday: "long",
+    });
+    const timeFormat = new Intl.DateTimeFormat("zh-CN", {
+      timeZone, hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23",
+    });
+    const dateValue = document.querySelector("#clock-date");
+    const timeValue = document.querySelector("#clock-time");
+
+    function updateClock() {
+      const now = new Date();
+      const time = timeFormat.format(now);
+      dateValue.textContent = dateFormat.format(now);
+      dateValue.dateTime = now.toISOString();
+      timeValue.textContent = time;
+      timeValue.dateTime = time;
+    }
+
+    updateClock();
+    document.querySelector("#clock-card").hidden = false;
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
